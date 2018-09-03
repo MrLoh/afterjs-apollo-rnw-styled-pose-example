@@ -19,6 +19,14 @@ export default class Document extends React.Component {
     // set server apollo state
     const serializedApolloState = JSON.stringify(apolloState).replace(/</g, "\\u003c");
     const setApolloStateScript = `window.__APOLLO_STATE__ = ${serializedApolloState};`;
+    // set environment variables
+    const envVars = Object.entries(process.env).filter(
+      ([key, value]) => key === "NODE_ENV" || key.substring(0, 9) === "REACT_APP"
+    );
+    const setEnvironmentScript = `window.process = {env: {} };${envVars
+      .map(([key, value]) => `window.process.env.${key} = '${value}'`)
+      .join(";")}`;
+    console.log(envVars, setEnvironmentScript);
     return (
       <html {...htmlAttrs}>
         <head>
@@ -35,6 +43,7 @@ export default class Document extends React.Component {
           <AfterRoot />
           <AfterData data={data} />
           <script dangerouslySetInnerHTML={{ __html: setApolloStateScript }} />
+          <script dangerouslySetInnerHTML={{ __html: setEnvironmentScript }} />
           <script type="text/javascript" src={assets.client.js} defer crossOrigin="anonymous" />
         </body>
       </html>
