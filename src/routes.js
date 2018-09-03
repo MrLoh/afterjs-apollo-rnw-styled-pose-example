@@ -1,22 +1,22 @@
-import React from 'react';
+import { asyncComponent } from "@jaredpalmer/after";
 
-import { asyncComponent } from '@jaredpalmer/after';
+import Placeholder from "./components/Placeholder";
 
 export default [
   {
-    path: '/',
+    path: "/",
     exact: true,
     component: asyncComponent({
-      loader: () => import('./Home'), // required
-      Placeholder: () => <div>...LOADING...</div>, // this is optional, just returns null by default
-    }),
+      loader: () => import("./screens/Home"),
+      Placeholder
+    })
   },
   {
-    path: '/about',
+    path: "/about",
     exact: true,
     component: asyncComponent({
-      loader: () => import('./About'), // required
-      Placeholder: () => <div>...LOADING...</div>, // this is optional, just returns null by default
-    }),
-  },
+      loader: () => import("./screens/About"),
+      Placeholder
+    })
+  }
 ];
