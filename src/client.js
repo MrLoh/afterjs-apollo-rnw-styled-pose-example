@@ -2,12 +2,16 @@ import React from "react";
 import { hydrate } from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { ensureReady, After } from "@jaredpalmer/after";
+
+import Provider from "./Provider";
 import routes from "./routes";
 
 ensureReady(routes).then(data =>
   hydrate(
     <BrowserRouter>
-      <After data={data} routes={routes} />
+      <Provider>
+        <After data={data} routes={routes} />
+      </Provider>
     </BrowserRouter>,
     document.getElementById("root")
   )
