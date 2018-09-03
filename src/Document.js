@@ -6,19 +6,19 @@ export default class Document extends React.Component {
   static async getInitialProps({ assets, data, renderPage }) {
     const sheet = new ServerStyleSheet();
     injectGlobal`body, html { margin: 0 }`;
-    const page = await renderPage(App => props =>
-      sheet.collectStyles(<App {...props} />)
-    );
+    const page = await renderPage(App => props => sheet.collectStyles(<App {...props} />));
     const styleTags = sheet.getStyleElement();
     return { assets, data, ...page, styleTags };
   }
 
   render() {
-    const { helmet, assets, data, styleTags } = this.props;
+    const { helmet, assets, data, styleTags, apolloState } = this.props;
     // get attributes from React Helmet
     const htmlAttrs = helmet.htmlAttributes.toComponent();
     const bodyAttrs = helmet.bodyAttributes.toComponent();
-
+    // set server apollo state
+    const serializedApolloState = JSON.stringify(apolloState).replace(/</g, "\\u003c");
+    const setApolloStateScript = `window.__APOLLO_STATE__ = ${serializedApolloState};`;
     return (
       <html {...htmlAttrs}>
         <head>
@@ -34,12 +34,8 @@ export default class Document extends React.Component {
         <body {...bodyAttrs}>
           <AfterRoot />
           <AfterData data={data} />
-          <script
-            type="text/javascript"
-            src={assets.client.js}
-            defer
-            crossOrigin="anonymous"
-          />
+          <script dangerouslySetInnerHTML={{ __html: setApolloStateScript }} />
+          <script type="text/javascript" src={assets.client.js} defer crossOrigin="anonymous" />
         </body>
       </html>
     );

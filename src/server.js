@@ -2,8 +2,11 @@ import React from "react";
 import express from "express";
 import { render } from "@jaredpalmer/after";
 import { renderToString } from "react-dom/server";
+import { ThemeProvider } from "styled-components";
+import { ApolloProvider, getDataFromTree } from "react-apollo";
 
-import Provider from "./Provider";
+import { createApolloClient } from "./apollo";
+import theme from "./theme";
 import routes from "./routes";
 import document from "./Document";
 
@@ -15,10 +18,23 @@ server
   .disable("x-powered-by")
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
   .get("/*", async (req, res) => {
+    console.log("requested:", req.url);
     try {
       const customRenderer = node => {
-        const App = <Provider>{node}</Provider>;
-        return { html: renderToString(App) };
+        try {
+          const client = createApolloClient({ ssrMode: true });
+          const App = (
+            <ApolloProvider client={client}>
+              <ThemeProvider theme={theme}>{node}</ThemeProvider>
+            </ApolloProvider>
+          );
+          return getDataFromTree(App).then(() => ({
+            html: renderToString(App),
+            apolloState: client.extract()
+          }));
+        } catch (e) {
+          console.log("error in renderer", e);
+        }
       };
       const html = await render({
         req,
