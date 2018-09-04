@@ -1,4 +1,5 @@
 export default {
+  unit: 8,
   colors: {
     background: "#FFFFFF",
     altBackground: "#EFF2F2",

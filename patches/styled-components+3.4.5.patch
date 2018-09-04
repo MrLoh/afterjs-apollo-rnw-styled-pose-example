@@ -1,0 +1,12 @@
+patch-package
+--- a/node_modules/styled-components/dist/styled-components.native.cjs.js
++++ b/node_modules/styled-components/dist/styled-components.native.cjs.js
+@@ -12,7 +12,7 @@ var transformDeclPairs = _interopDefault(require('css-to-react-native'));
+ var PropTypes = _interopDefault(require('prop-types'));
+ var hoist = _interopDefault(require('hoist-non-react-statics'));
+ var reactIs = require('react-is');
+-var reactNative = _interopDefault(require('react-native'));
++var reactNative = _interopDefault(require('react-native-web'));
+ 
+ // Source: https://github.com/garycourt/murmurhash-js/blob/master/murmurhash2_gc.js
+ function murmurhash(str) {
