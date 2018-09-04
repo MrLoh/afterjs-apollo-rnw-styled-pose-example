@@ -4,9 +4,15 @@
 	],
 	"plugins": [
 		[
-			"babel-plugin-styled-components",
+			"dotenv",
 			{
-				"ssr": true
+				"replacedModuleName": "babel-dotenv"
+			}
+		],
+		[
+			"react-native-web",
+			{
+				"commonjs": true
 			}
 		]
 	]

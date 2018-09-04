@@ -15,6 +15,7 @@
     "apollo-link": "^1.2.2",
     "apollo-link-error": "^1.1.0",
     "apollo-link-http": "^1.5.4",
+    "babel-plugin-dotenv": "^0.1.1",
     "cross-fetch": "^2.2.2",
     "express": "^4.16.2",
     "graphql": "^14.0.0",
@@ -22,12 +23,16 @@
     "razzle": "^2.4.0",
     "react": "^16.2.0",
     "react-apollo": "^2.1.11",
+    "react-art": "^16.4.2",
     "react-dom": "^16.2.0",
     "react-helmet": "^5.2.0",
+    "react-native-web": "^0.8.9",
     "react-router-dom": "^4.2.2",
     "styled-components": "^3.4.5"
   },
   "devDependencies": {
+    "babel-plugin-module-resolver": "^3.1.1",
+    "babel-plugin-react-native-web": "^0.8.9",
     "babel-plugin-styled-components": "^1.6.0"
   }
 }

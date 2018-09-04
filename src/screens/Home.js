@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
+// import styled from "styled-components/native";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
+import { View, Text } from "react-native";
 
-const Wrapper = styled.div`
-  flex: 1;
-  background-color: ${p => p.theme.colors.altBackground};
-`;
+// const Wrapper = styled(View)`
+//   flex: 1;
+//   background-color: ${p => p.theme.colors.altBackground};
+// `;
 
 class Home extends Component {
   static async getInitialProps({ req, res, match, history, location, ...ctx }) {
@@ -16,8 +17,15 @@ class Home extends Component {
 
   render() {
     return (
-      <Wrapper>
-        <h2>Welcome to After.js</h2>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "lightgray",
+          alignItems: "center",
+          overflow: "scroll"
+        }}
+      >
+        <Text style={{ fontSize: 30 }}>Welcome to After.js</Text>
         <Link to="/about">About -></Link>
         <Query
           query={gql`
@@ -31,22 +39,24 @@ class Home extends Component {
         >
           {({ data, error }) =>
             error ? (
-              <div>{error}</div>
+              <Text>{JSON.stringify(error)}</Text>
             ) : data.cinemas ? (
-              <div>
-                <h3>Our Cinemas</h3>
-                <ul>
+              <View>
+                <Text style={{ fontWeight: "700" }}>Our Cinemas</Text>
+                <View>
                   {data.cinemas.map(({ name, id }) => (
-                    <li key={id}>{name}</li>
+                    <Text key={id} style={{ marginTop: 20 }}>
+                      {name}
+                    </Text>
                   ))}
-                </ul>
-              </div>
+                </View>
+              </View>
             ) : (
-              <div>loading ...</div>
+              <Text>loading ...</Text>
             )
           }
         </Query>
-      </Wrapper>
+      </View>
     );
   }
 }

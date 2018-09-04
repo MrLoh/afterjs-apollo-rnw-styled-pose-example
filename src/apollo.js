@@ -5,6 +5,8 @@ import { createHttpLink } from "apollo-link-http";
 import { onError } from "apollo-link-error";
 import { ApolloLink } from "apollo-link";
 
+import { API_ENDPOINT } from "babel-dotenv";
+
 export const createApolloClient = options => {
   const cache = new InMemoryCache();
   if (options.initialState) {
@@ -18,7 +20,7 @@ export const createApolloClient = options => {
         );
       if (networkError) console.log(`[Network error]: ${networkError}`);
     }),
-    createHttpLink({ uri: process.env.REACT_APP_API_ENDPOINT, fetch })
+    createHttpLink({ uri: API_ENDPOINT, fetch })
   ]);
   return new ApolloClient({ link, cache, ...options });
 };

@@ -1,3 +1,4 @@
+// executed by server
 import app from "./server";
 import http from "http";
 

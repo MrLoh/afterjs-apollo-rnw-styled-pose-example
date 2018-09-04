@@ -1,32 +1,31 @@
+// executed by server
 import React from "react";
-import { ServerStyleSheet, injectGlobal } from "styled-components";
-import { AfterRoot, AfterData } from "@jaredpalmer/after";
+import { AfterData, AfterRoot } from "@jaredpalmer/after";
+
+const globalCss = `
+	html, body, #root {
+		height: 100%; 
+		overflow: hidden;
+	}
+	#root {
+		display: flex;
+	}
+`;
 
 export default class Document extends React.Component {
   static async getInitialProps({ assets, data, renderPage }) {
-    const sheet = new ServerStyleSheet();
-    injectGlobal`body, html { margin: 0 }`;
-    const page = await renderPage(App => props => sheet.collectStyles(<App {...props} />));
-    const styleTags = sheet.getStyleElement();
-    return { assets, data, ...page, styleTags };
+    const page = await renderPage();
+    return { assets, data, ...page };
   }
 
   render() {
-    const { helmet, assets, data, styleTags, apolloState } = this.props;
+    const { helmet, assets, data, styleElement, apolloState } = this.props;
     // get attributes from React Helmet
     const htmlAttrs = helmet.htmlAttributes.toComponent();
     const bodyAttrs = helmet.bodyAttributes.toComponent();
     // set server apollo state
-    const serializedApolloState = JSON.stringify(apolloState).replace(/</g, "\\u003c");
+    const serializedApolloState = (JSON.stringify(apolloState) || "").replace(/</g, "\\u003c");
     const setApolloStateScript = `window.__APOLLO_STATE__ = ${serializedApolloState};`;
-    // set environment variables
-    const envVars = Object.entries(process.env).filter(
-      ([key, value]) => key === "NODE_ENV" || key.substring(0, 9) === "REACT_APP"
-    );
-    const setEnvironmentScript = `window.process = {env: {} };${envVars
-      .map(([key, value]) => `window.process.env.${key} = '${value}'`)
-      .join(";")}`;
-    console.log(envVars, setEnvironmentScript);
     return (
       <html {...htmlAttrs}>
         <head>
@@ -37,13 +36,13 @@ export default class Document extends React.Component {
           {helmet.title.toComponent()}
           {helmet.meta.toComponent()}
           {helmet.link.toComponent()}
-          {styleTags}
+          <style>{globalCss}</style>
+          {styleElement}
+          <script dangerouslySetInnerHTML={{ __html: setApolloStateScript }} />
         </head>
         <body {...bodyAttrs}>
           <AfterRoot />
           <AfterData data={data} />
-          <script dangerouslySetInnerHTML={{ __html: setApolloStateScript }} />
-          <script dangerouslySetInnerHTML={{ __html: setEnvironmentScript }} />
           <script type="text/javascript" src={assets.client.js} defer crossOrigin="anonymous" />
         </body>
       </html>
