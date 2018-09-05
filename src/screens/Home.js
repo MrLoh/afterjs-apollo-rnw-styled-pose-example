@@ -6,8 +6,6 @@ import { Query } from 'react-apollo';
 import { View, Text } from 'react-native';
 import posed from 'react-pose';
 
-import ScreenWrapper from '../components/ScreenWrapper';
-
 const Wrapper = styled.ScrollView.attrs({
 	contentContainerStyle: css`
 		padding-top: ${(p) => p.theme.unit * 4}px;
@@ -39,40 +37,38 @@ const Item = styled(ItemTransition)`
 `;
 
 const Home = () => (
-	<ScreenWrapper>
-		<Wrapper>
-			<Title>Welcome to After.js</Title>
-			<Query
-				query={gql`
-					query AllFilms {
-						allFilms {
-							id
-							title
-						}
+	<Wrapper>
+		<Title>Welcome to After.js</Title>
+		<Query
+			query={gql`
+				query AllFilms {
+					allFilms {
+						id
+						title
 					}
-				`}
-			>
-				{({ data, error }) =>
-					error ? (
-						<Text>{JSON.stringify(error)}</Text>
-					) : data.allFilms ? (
-						<View>
-							<SubTitle>All Films</SubTitle>
-							<ItemWrapper>
-								{data.allFilms.map(({ title, id }) => (
-									<Item key={id}>
-										<Text>{title}</Text>
-									</Item>
-								))}
-							</ItemWrapper>
-						</View>
-					) : (
-						<Text>loading ...</Text>
-					)
 				}
-			</Query>
-		</Wrapper>
-	</ScreenWrapper>
+			`}
+		>
+			{({ data, error }) =>
+				error ? (
+					<Text>{JSON.stringify(error)}</Text>
+				) : data.allFilms ? (
+					<View>
+						<SubTitle>All Films</SubTitle>
+						<ItemWrapper>
+							{data.allFilms.map(({ title, id }) => (
+								<Item key={id}>
+									<Text>{title}</Text>
+								</Item>
+							))}
+						</ItemWrapper>
+					</View>
+				) : (
+					<Text>loading ...</Text>
+				)
+			}
+		</Query>
+	</Wrapper>
 );
 
 export default Home;

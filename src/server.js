@@ -5,7 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import { ApolloProvider, renderToStringWithData } from 'react-apollo';
 import { AppRegistry } from 'react-native';
 
-import RouteTransitioner from './RouteTransitioner';
+import layout from './Layout';
 import { createApolloClient } from './apollo';
 import theme from './theme';
 import routes from './routes';
@@ -25,9 +25,7 @@ const app = express()
 				const location = req.url;
 				const App = () => (
 					<ApolloProvider client={client}>
-						<ThemeProvider theme={theme}>
-							<RouteTransitioner location={location}>{node}</RouteTransitioner>
-						</ThemeProvider>
+						<ThemeProvider theme={theme}>{node}</ThemeProvider>
 					</ApolloProvider>
 				);
 				AppRegistry.registerComponent('App', () => App);
@@ -48,6 +46,7 @@ const app = express()
 				routes,
 				assets,
 				document,
+				layout,
 				customRenderer,
 			});
 			res.send(html);
