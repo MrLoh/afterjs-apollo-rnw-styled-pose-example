@@ -44,10 +44,10 @@ const Home = () => (
 			<Title>Welcome to After.js</Title>
 			<Query
 				query={gql`
-					query CinemaNames {
-						cinemas {
+					query AllFilms {
+						allFilms {
 							id
-							name
+							title
 						}
 					}
 				`}
@@ -55,13 +55,13 @@ const Home = () => (
 				{({ data, error }) =>
 					error ? (
 						<Text>{JSON.stringify(error)}</Text>
-					) : data.cinemas ? (
+					) : data.allFilms ? (
 						<View>
-							<SubTitle>Our Cinemas</SubTitle>
+							<SubTitle>All Films</SubTitle>
 							<ItemWrapper>
-								{data.cinemas.map(({ name, id }) => (
+								{data.allFilms.map(({ title, id }) => (
 									<Item key={id}>
-										<Text>{name}</Text>
+										<Text>{title}</Text>
 									</Item>
 								))}
 							</ItemWrapper>
