@@ -1,6 +1,6 @@
 {
-  "name": "razzle-examples-with-afterjs",
-  "version": "2.4.0",
+  "name": "afterjs-apollo-rnw-styled-pose-example",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "start": "razzle start",
