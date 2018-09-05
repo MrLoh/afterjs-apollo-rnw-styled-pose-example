@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { ensureReady, After } from '@jaredpalmer/after';
+import { ensureReady } from '@jaredpalmer/after';
+import { AfterWithTransition } from './AfterWithTransition';
 import { ThemeProvider } from 'styled-components';
 import { ApolloProvider } from 'react-apollo';
 import { AppRegistry } from 'react-native';
@@ -16,7 +17,7 @@ import routes from './routes';
 		<BrowserRouter>
 			<ApolloProvider client={client}>
 				<ThemeProvider theme={theme}>
-					<After data={data} routes={routes} />
+					<AfterWithTransition data={data} routes={routes} />
 				</ThemeProvider>
 			</ApolloProvider>
 		</BrowserRouter>

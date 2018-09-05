@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import styled from 'styled-components/native';
 import css from 'styled-css/native';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { View, Text } from 'react-native';
+import posed from 'react-pose';
+
+import ScreenWrapper from '../components/ScreenWrapper';
 
 const Wrapper = styled.ScrollView.attrs({
 	contentContainerStyle: css`
-		align-items: center;
-		justify-content: center;
 		padding-top: ${(p) => p.theme.unit * 4}px;
 	`,
 })`
 	flex: 1;
-	background-color: ${(p) => p.theme.colors.altBackground};
+	width: 400px;
 `;
 
 const Title = styled.Text`
@@ -25,46 +25,54 @@ const SubTitle = styled.Text`
 	font-weight: 700;
 `;
 
-const Item = styled.Text`
+const ItemWrapper = posed.div({
+	enter: { staggerChildren: 50 },
+	exit: { staggerChildren: 20, staggerDirection: -1 },
+});
+
+const ItemTransition = posed.div({
+	enter: { x: 0, opacity: 1 },
+	exit: { x: 50, opacity: 0 },
+});
+const Item = styled(ItemTransition)`
 	margin-top: 20px;
 `;
 
-class Home extends Component {
-	static async getInitialProps({ req, res, match, history, location, ...ctx }) {
-		return { whatever: 'stuff' };
-	}
-
-	render() {
-		return (
-			<Wrapper>
-				<Title>Welcome to After.js</Title>
-				<Link to="/about">About -></Link>
-				<Query
-					query={gql`
-						query CinemaNames {
-							cinemas {
-								id
-								name
-							}
+const Home = () => (
+	<ScreenWrapper>
+		<Wrapper>
+			<Title>Welcome to After.js</Title>
+			<Query
+				query={gql`
+					query CinemaNames {
+						cinemas {
+							id
+							name
 						}
-					`}
-				>
-					{({ data, error }) =>
-						error ? (
-							<Text>{JSON.stringify(error)}</Text>
-						) : data.cinemas ? (
-							<View>
-								<SubTitle>Our Cinemas</SubTitle>
-								<View>{data.cinemas.map(({ name, id }) => <Item key={id}>{name}</Item>)}</View>
-							</View>
-						) : (
-							<Text>loading ...</Text>
-						)
 					}
-				</Query>
-			</Wrapper>
-		);
-	}
-}
+				`}
+			>
+				{({ data, error }) =>
+					error ? (
+						<Text>{JSON.stringify(error)}</Text>
+					) : data.cinemas ? (
+						<View>
+							<SubTitle>Our Cinemas</SubTitle>
+							<ItemWrapper>
+								{data.cinemas.map(({ name, id }) => (
+									<Item key={id}>
+										<Text>{name}</Text>
+									</Item>
+								))}
+							</ItemWrapper>
+						</View>
+					) : (
+						<Text>loading ...</Text>
+					)
+				}
+			</Query>
+		</Wrapper>
+	</ScreenWrapper>
+);
 
 export default Home;
